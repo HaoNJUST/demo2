@@ -108,8 +108,10 @@ git status
 # 文件是红色
 
 git add .
-# 再次git status，
+# 再次git status，文件变绿色
+
 git commit -m '提交说明'
+#
 ```
 
 **将本地库项目推送到远程库中**：按分支推送，需要指定推送哪个分支
