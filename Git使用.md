@@ -70,13 +70,37 @@ git checkout hot-fix
 然后就可以在这个分支上，修改之前的文件，并添加到缓存区，提交到本地库
 ```
 
+**删除本地仓库的分支**
+
+要删除 Git 中的分支，可以使用 `git branch -d` 命令。以下是具体的步骤：
+
+1. 首先，确保你不在要删除的分支上。你可以切换到另一个分支，比如 `main` 分支：
+
+   ```bash
+   git checkout main
+   ```
+
+2. 然后，使用 `git branch -d` 命令来删除分支。比如，如果你要删除名为 `feature` 的分支：
+
+   ```bash
+   git branch -d feature
+   ```
+
+   如果分支包含了未合并的更改，Git 会给出警告并阻止删除。如果你确定要强制删除分支，可以使用 `-D` 选项：
+
+   ```bash
+   git branch -D feature
+   ```
+
+   这将强制删除分支，即使它包含了未合并的更改。
+
+当分支被删除后，相关的提交历史并不会丢失，它们仍然会保留在 Git 的提交历史中。
+
 **创建分支时出现的问题**
 
 * 本地库刚初始化之后，默认的是master分支，输入git branch main想新建立一个分支，但是报错：fatal: not a valid object name: 'master'。
 * 这是因为此时本地库其实还没有master分支，要先commit一次才会真正建立master分支，此时就可以新建立分支了。
 * 建立新的分支之后，再把这个master分支删除
-
-
 
 **合并分支：**
 
@@ -222,7 +246,8 @@ echo "# demo2" >> README.md
 
 ### 四、为一台主机配置ssh免密登录
 
-windows
+==windows==
+
 1.确保该主机没有ssh配置：C:\Users\22989目录下没有.ssh文件，在该目录下打开git，然后生成ssh key
 
 ```
