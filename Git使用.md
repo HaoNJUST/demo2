@@ -216,3 +216,26 @@ echo "# demo2" >> README.md
 因此，使用 `-u` 参数可以简化后续的推送操作，使得 Git 能够更智能地处理默认的推送行为。
 ```
 
+# 三、为一台主机配置ssh免密登录
+
+windows
+1.确保该主机没有ssh配置：C:\Users\22989目录下没有.ssh文件，在该目录下打开git，然后生成ssh key
+
+```
+输入：ssh-keygen -t rsa -C "xxx@xxx.com"
+然后敲三次回车，然后发现该目录下.ssh文件夹出来了，里面的 id_rsa是私钥，id_rsa.pub是公钥
+```
+
+2.拿到公钥，先确保自己在.ssh目录下，可以使用 cd ~/.ssh 进入这个目录，也可以试试 cd .ssh
+
+```
+cat id_rsa.pub
+复制输出内容
+```
+
+3.把当前主机的公钥复制到你的github账号上去
+
+* 点击头像-settings-SSH and GPG kets,然后 右侧绿色按钮 New SSH key
+* 为这个密钥起个名字，可以起这台主机的名字，然后把刚刚复制的公钥粘贴进来
+
+4.成功之后Push和clone代码，使用的连接是ssh了，不再是http了。
