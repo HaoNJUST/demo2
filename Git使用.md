@@ -1,6 +1,6 @@
 # Git使用
 
-### 一、基本知识
+### 一、本地仓库命令相关
 
 **git的文件状态**
 
@@ -96,16 +96,23 @@ git commit -m "merge test"
 git commit -m "merge test"  hello.txt
 ```
 
+### 二、远程仓库命令相关
+
 **创建远程仓库**：
 
 * push 推送：将本地库的代码推送到远程库中；
 * clone 克隆：将远程库的代码完整地下载到自己的本地库中；
 * pull  拉取：将远程库的代码（通常是更新过的），再拉取到自己的本地库，让自己的本地库也有最新版本；
 
-```
+```bash
 在github上，创建的仓库会生成一个远程库链接；创建远程库别名：链接太长，给链接起别名；远程仓库的别名和远程仓库的名字保持一致，不然容易忘记；
 git remote add 别名 链接
-git remote add git-demo https://github.com/HaoNJUST/demo01.git
+
+使用ssh别名，http有时候连不上：
+git remote add origin_ssh git@github.com:your-username/your-repository.git
+
+#git remote add git-demo https://github.com/HaoNJUST/demo01.git
+
 查看给远程库的（本地库）的别名；
 git remote -v
 ```
@@ -129,7 +136,6 @@ git add .
 git commit -m '提交说明'
 # 再次再次git status， 显示nothing to commit, working tree clean
 
-
 ```
 
 **将本地库项目推送到远程库中**：按分支推送，需要指定推送哪个分支。
@@ -145,12 +151,10 @@ git push git-demo master
 git push demo1 master:main
 ```
 
-
-
 **拉取远程库到本地**：远程库的代码被更新了，为了保证自己的本地库和远程库内容一致
 
 ```
-git pull 目标远程库的别名（或者链接）  本地库的分支
+git pull 目标远程库的别名（或者链接） 远程库的分支
 ```
 
 **克隆远程库到本地**
@@ -160,15 +164,15 @@ git clone 远程库的链接
 完成了三件事：拉取代码、初始化本地库、创建别名；别名默认是o
 ```
 
-### 二、创建仓库的注意事项
+### 三、创建仓库的注意事项
 
 **一些问题:**
 
 ```bash
 git的默认分支是master，github仓库的默认分支是main，所以等于提交的时候，远程仓库上有了两个分支，而且还合并不了。
+
 所以想要远程仓库只有一个main分支的话，就在git里新建一个叫main的分支，删除原来的master分支。然后切换到这个分支，对文件进行提交到暂存区，工作区，然后推送到远程库。
 。
-
 ```
 
 **删除本地仓库的分支**
@@ -216,7 +220,7 @@ echo "# demo2" >> README.md
 因此，使用 `-u` 参数可以简化后续的推送操作，使得 Git 能够更智能地处理默认的推送行为。
 ```
 
-# 三、为一台主机配置ssh免密登录
+### 四、为一台主机配置ssh免密登录
 
 windows
 1.确保该主机没有ssh配置：C:\Users\22989目录下没有.ssh文件，在该目录下打开git，然后生成ssh key
@@ -239,3 +243,44 @@ cat id_rsa.pub
 * 为这个密钥起个名字，可以起这台主机的名字，然后把刚刚复制的公钥粘贴进来
 
 4.成功之后Push和clone代码，使用的连接是ssh了，不再是http了。
+
+### 五、多个本地仓库与远程仓库连接的问题
+
+1.在本地仓库和远程仓库连接时，必须先要进行同步，否则这个本地库将无法推送内容去远程库。
+
+ * 这种情况通常发生在多人协作开发的情况下，其中一个人已经将他们的代码推送到了远程仓库，而你的本地代码落后于远程代码。为了避免冲突，Git 不允许你直接将本地代码推送到远程仓库。相反，你需要先将远程代码合并到你的本地分支中，然后再将合并后的代码推送到远程仓库。
+
+```
+git pull git@github.com:HaoNJUST/demo2.git main
+将远程仓库的main分支合并到本地所在的分支中；
+```
+
+2.执行上面这个命令之后可能会报错：'fatal: refusing to merge unrelated histories
+
+* 解决方法：在其代码模块后加上这个参数，强制合并，忽视提交的历史，之后通过代码模块的不同进行合并即可
+
+```
+git pull git@github.com:HaoNJUST/demo2.git main --allow-unrelated-histories
+强制合并，忽视提交的历史，
+```
+
+3.可以在本地Git仓库中同时为HTTPS和SSH连接设置别名
+
+```bash
+# 为HTTPS连接添加远程仓库别名
+git remote add origin_https https://github.com/your-username/your-repository.git
+
+# 为SSH连接添加远程仓库别名
+git remote add origin_ssh git@github.com:your-username/your-repository.git
+```
+
+在 Git 中，远程仓库别名是唯一的，不允许两个不同类型（例如 HTTPS 和 SSH）的远程仓库共享相同的别名。
+
+4.删除远程仓库的别名：为什么需要这步，因为最开始给http起了远程仓库的别名，但是http有时连接不上，所以重新给ssh起别名，想要名字和远程仓库名字一样，那就得删除原来的http的别名
+
+```
+git remote remove origin_https
+或者
+git remote rm origin_https
+```
+
