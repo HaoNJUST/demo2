@@ -157,6 +157,8 @@ echo "# demo2" >> README.md
   git push -u origin main
   
   
+  一旦推送完成，你的 README.md 文件就会出现在 GitHub 仓库中，并且会自动显示为项目的 README 文件。如果你已经有一个 README.md 文件，它将会被替换为你刚刚推送的文件。
+  
   在 `git push -u origin main` 命令中，`-u` 参数的含义是将远程分支和本地分支关联起来，并设置远程分支为默认上游分支。
 
 具体来说，`-u` 参数的作用是将本地的 `main` 分支推送到远程仓库的 `origin` 主机上，并且将本地的 `main` 分支与远程的 `main` 分支关联起来。这样一来，以后在使用 `git push` 命令时，Git 就会默认将本地的 `main` 分支推送到远程的 `main` 分支，而不需要再指定远程分支的名称。
