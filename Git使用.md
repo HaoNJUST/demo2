@@ -111,7 +111,9 @@ git add .
 # 再次git status，文件变绿色
 
 git commit -m '提交说明'
-#
+#再次再次git status， 显示nothing to commit, working tree clean
+
+
 ```
 
 **将本地库项目推送到远程库中**：按分支推送，需要指定推送哪个分支
@@ -162,7 +164,9 @@ echo "# demo2" >> README.md
 因此，使用 `-u` 参数可以简化后续的推送操作，使得 Git 能够更智能地处理默认的推送行为。
 ```
 
-```
+**重新给远程仓库命名**
 
+```
+git remote rename old_name new_name
 ```
 
