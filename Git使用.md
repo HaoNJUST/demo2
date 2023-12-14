@@ -1,5 +1,7 @@
 # Git使用
 
+### 一、基本知识
+
 **git的文件状态**
 
 ```
@@ -68,6 +70,14 @@ git checkout hot-fix
 然后就可以在这个分支上，修改之前的文件，并添加到缓存区，提交到本地库
 ```
 
+**创建分支时出现的问题**
+
+* 本地库刚初始化之后，默认的是master分支，输入git branch main想新建立一个分支，但是报错：fatal: not a valid object name: 'master'。
+* 这是因为此时本地库其实还没有master分支，要先commit一次才会真正建立master分支，此时就可以新建立分支了。
+* 建立新的分支之后，再把这个master分支删除
+
+
+
 **合并分支：**
 
 ```
@@ -93,11 +103,17 @@ git commit -m "merge test"  hello.txt
 * pull  拉取：将远程库的代码（通常是更新过的），再拉取到自己的本地库，让自己的本地库也有最新版本；
 
 ```
-在github上，创建的仓库会生成一个远程库链接；创建远程库别名：链接太长，给链接起别名；
+在github上，创建的仓库会生成一个远程库链接；创建远程库别名：链接太长，给链接起别名；远程仓库的别名和远程仓库的名字保持一致，不然容易忘记；
 git remote add 别名 链接
 git remote add git-demo https://github.com/HaoNJUST/demo01.git
 查看给远程库的（本地库）的别名；
 git remote -v
+```
+
+**重新给远程仓库命名**
+
+```
+git remote rename old_name new_name
 ```
 
 **将本地仓库所有修改过的文件提交到暂存区，再提交到工作区**
@@ -111,19 +127,25 @@ git add .
 # 再次git status，文件变绿色
 
 git commit -m '提交说明'
-#再次再次git status， 显示nothing to commit, working tree clean
+# 再次再次git status， 显示nothing to commit, working tree clean
 
 
 ```
 
-**将本地库项目推送到远程库中**：按分支推送，需要指定推送哪个分支
-
-推送的最小单位是分支，把本地库的哪个分支推送过去
+**将本地库项目推送到远程库中**：按分支推送，需要指定推送哪个分支。
 
 ```
 git push 目标远程库的别名（或者链接） 本地库的分支
 git push git-demo master
 ```
+
+可以将本地的master分支的内容提交到远程库的main分支中
+
+```
+git push demo1 master:main
+```
+
+
 
 **拉取远程库到本地**：远程库的代码被更新了，为了保证自己的本地库和远程库内容一致
 
@@ -138,14 +160,44 @@ git clone 远程库的链接
 完成了三件事：拉取代码、初始化本地库、创建别名；别名默认是o
 ```
 
-**一些问题**
+### 二、创建仓库的注意事项
 
-```
+**一些问题:**
+
+```bash
 git的默认分支是master，github仓库的默认分支是main，所以等于提交的时候，远程仓库上有了两个分支，而且还合并不了。
-所以想要远程仓库只有一个main分支的话，就在git里新建一个叫main的分支，然后切换到这个分支，对文件进行提交到暂存区，工作区，然后推送到远程库。
+所以想要远程仓库只有一个main分支的话，就在git里新建一个叫main的分支，删除原来的master分支。然后切换到这个分支，对文件进行提交到暂存区，工作区，然后推送到远程库。
+。
+
 ```
 
-上传.md文件
+**删除本地仓库的分支**
+
+要删除 Git 中的分支，可以使用 `git branch -d` 命令。以下是具体的步骤：
+
+1. 首先，确保你不在要删除的分支上。你可以切换到另一个分支，比如 `main` 分支：
+
+   ```bash
+   git checkout main
+   ```
+
+2. 然后，使用 `git branch -d` 命令来删除分支。比如，如果你要删除名为 `feature` 的分支：
+
+   ```bash
+   git branch -d feature
+   ```
+
+   如果分支包含了未合并的更改，Git 会给出警告并阻止删除。如果你确定要强制删除分支，可以使用 `-D` 选项：
+
+   ```bash
+   git branch -D feature
+   ```
+
+   这将强制删除分支，即使它包含了未合并的更改。
+
+当分支被删除后，相关的提交历史并不会丢失，它们仍然会保留在 Git 的提交历史中。
+
+**上传.md文件**: 命名一个md文件为README，名字不要写错。一旦推送完成，你的 README.md 文件就会出现在 GitHub 仓库中，并且会自动显示为项目的 README 文件。如果你已经有一个 README.md 文件，它将会被替换为你刚刚推送的文件。
 
 ```
 echo "# demo2" >> README.md
@@ -157,18 +209,10 @@ echo "# demo2" >> README.md
   git push -u origin main
   
   
-  一旦推送完成，你的 README.md 文件就会出现在 GitHub 仓库中，并且会自动显示为项目的 README 文件。如果你已经有一个 README.md 文件，它将会被替换为你刚刚推送的文件。
-  
   在 `git push -u origin main` 命令中，`-u` 参数的含义是将远程分支和本地分支关联起来，并设置远程分支为默认上游分支。
 
 具体来说，`-u` 参数的作用是将本地的 `main` 分支推送到远程仓库的 `origin` 主机上，并且将本地的 `main` 分支与远程的 `main` 分支关联起来。这样一来，以后在使用 `git push` 命令时，Git 就会默认将本地的 `main` 分支推送到远程的 `main` 分支，而不需要再指定远程分支的名称。
 
 因此，使用 `-u` 参数可以简化后续的推送操作，使得 Git 能够更智能地处理默认的推送行为。
-```
-
-**重新给远程仓库命名**
-
-```
-git remote rename old_name new_name
 ```
 
